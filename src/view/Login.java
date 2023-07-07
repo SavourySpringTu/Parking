@@ -2,11 +2,11 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.xml.transform.Result;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import Connection.ConnectionSQL;
 
 public class Login extends JFrame {
     private static JFrame frame;

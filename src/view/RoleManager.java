@@ -1,5 +1,8 @@
 package view;
 
+import About.DbUtils;
+import Connection.ConnectionSQL;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -30,7 +33,6 @@ public class RoleManager extends JFrame {
     DefaultTableModel model = new DefaultTableModel();
     public RoleManager() throws SQLException, ClassNotFoundException {
         connectionSQL = new ConnectionSQL();
-        Statement stmt = connectionSQL.ConnectionSQL().createStatement();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(170,60,1600, 1000);
@@ -69,14 +71,10 @@ public class RoleManager extends JFrame {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                id = tfId.getText();
+                name = tfName.getText();
                 try {
-                    id = tfId.getText();
-                    name = tfName.getText();
-                    PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO role(id,name) VALUES (?,?)");
-                    pstmt.setString(1,id);
-                    pstmt.setString(2,name);
-                    pstmt.executeUpdate();
-                    table.setModel(updateTable(model));
+                    addRole(id,name);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
@@ -87,11 +85,36 @@ public class RoleManager extends JFrame {
 
         panel.add(btnUpdate);
         btnUpdate.setBounds(1200, 400, 130, 35);
+        btnUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                id = tfId.getText();
+                name = tfName.getText();
+                try {
+                    updateRole(id,name);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         panel.add(btnDelete);
         btnDelete.setBounds(1200, 450, 130, 35);
-
-        stmt.close();
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                id = tfId.getText();
+                try {
+                    deleteRole(id);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         // ================== BUTTON EXIT ======================
         panel.add(btnExit);
@@ -122,6 +145,37 @@ public class RoleManager extends JFrame {
         scrollPane.setBounds(30, 110, 700, 800);
         getContentPane().add(scrollPane);
     }
+
+    // ======================= Add ========================
+    public void addRole(String id,String name) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO role(id,name) VALUES (?,?)");
+        pstmt.setString(1,id);
+        pstmt.setString(2,name);
+        pstmt.executeUpdate();
+        pstmt.close();
+        refreshTable();
+    }
+
+    // ======================= Update =====================
+    public void updateRole(String id, String name) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE role SET name=? WHERE id=?");
+        pstmt.setString(1,name);
+        pstmt.setString(2,id);
+        pstmt.executeUpdate();
+        pstmt.close();
+        refreshTable();
+    }
+
+    // ======================= Delete =====================
+    public void deleteRole(String id) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("DELETE FROM role WHERE id=?");
+        pstmt.setString(1,id);
+        pstmt.executeUpdate();
+        pstmt.close();
+        refreshTable();
+    }
+
+    // ======================== List ======================
     public DefaultTableModel showList(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) table.getModel();
         String header[] = {"Id","Name"};
@@ -130,24 +184,15 @@ public class RoleManager extends JFrame {
         ResultSet rs = pstmt.executeQuery();
         while(rs.next())
         {
-            Object objList[] = {rs.getString("id"),rs.getString("name")};
-            model.addRow(objList);
+            String row [] = {rs.getString("id"),rs.getString("name")};
+            model.addRow(row);
         }
         pstmt.close();
         return model;
     }
-    public DefaultTableModel updateTable(DefaultTableModel model) throws SQLException, ClassNotFoundException {
-        this.model = (DefaultTableModel) table.getModel();
-        String header[] = {"Id","Name"};
-        this.model.setColumnIdentifiers(header);
+    public void refreshTable() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM role");
         ResultSet rs = pstmt.executeQuery();
-        while (rs.next()){
-            String a[]={rs.getString("id"),rs.getString("name")};
-            if(rs.next()==false){
-                model.addRow(a);
-            }
-        }
-        return this.model;
+        table.setModel(DbUtils.resultSetToTableModel(rs));
     }
 }
