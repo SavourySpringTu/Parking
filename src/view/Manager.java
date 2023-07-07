@@ -52,6 +52,14 @@ public class Manager extends JFrame {
         // ==================== BUTTON TICKET =====================
         panel.add(btnTicket);
         btnTicket.setBounds(600,100,400,70);
+        btnTicket.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TicketManager ticketManager = new TicketManager();
+                ticketManager.setVisible(true);
+                dispose();
+            }
+        });
 
         // ===================== BUTTON ROLE =====================
         panel.add(btnRole);
