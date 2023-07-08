@@ -24,6 +24,10 @@ public class TicketManager extends JFrame{
     private JButton btnExit;
     private JButton btnTakeIn;
     private JButton btnTakeOut;
+    private JButton btnAdd;
+    private JButton btnUpdate;
+    private JButton btnExport;
+
     private ConnectionSQL connectionSQL;
     private DefaultTableModel model = new DefaultTableModel();
     private Check check = new Check();
@@ -48,14 +52,46 @@ public class TicketManager extends JFrame{
         btnExit = new JButton("EXIT");
         btnTakeIn = new JButton("TAKE");
         btnTakeOut = new JButton("TAKE");
+        btnAdd = new JButton("ADD");
+        btnUpdate = new JButton("UPDATE");
+        btnExport = new JButton("EXPORT");
 
         panel.add(btnTakeIn);
         btnTakeIn.setBounds(178,430,130,35);
-        btnExit.setBackground(Color.GREEN);
+        btnTakeIn.setBackground(Color.GREEN);
 
         panel.add(btnTakeOut);
         btnTakeOut.setBounds(178,810,130,35);
         btnTakeOut.setBackground(Color.GREEN);
+
+        panel.add(lbId);
+        lbId.setBounds(600,100,100,50);
+        panel.add(lbNumber);
+        lbNumber.setBounds(600,150,100,50);
+        panel.add(lbPrice);
+        lbPrice.setBounds(600,200,100,50);
+        panel.add(lbType);
+        lbType.setBounds(600,250,100,50);
+
+        panel.add(tfId);
+        tfId.setBounds(680,110,200,35);
+        panel.add(tfNumber);
+        tfNumber.setBounds(680,160,200,35);
+        panel.add(tfPrice);
+        tfPrice.setBounds(680,210,200,35);
+        panel.add(tfType);
+        tfType.setBounds(680,260,200,35);
+
+        panel.add(btnAdd);
+        btnAdd.setBounds(950, 130, 130, 35);
+        btnAdd.setBackground(Color.GREEN);
+        panel.add(btnUpdate);
+        btnUpdate.setBounds(950, 180, 130, 35);
+        btnUpdate.setBackground(Color.ORANGE);
+        panel.add(btnExport);
+        btnExport.setBounds(950, 230, 130, 35);
+        btnExport.setBackground(Color.CYAN);
+
 
         panel.add(btnExit);
         btnExit.setBounds(10,10,100,50);

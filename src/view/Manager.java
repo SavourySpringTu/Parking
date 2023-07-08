@@ -10,7 +10,6 @@ public class Manager extends JFrame {
     private JPanel panel;
     private JButton btnRole;
     private JButton btnTicket;
-    private JButton btnUser;
     private JButton btnPosition;
     private JButton btnWareHouse;
     private JButton btnRevenue;
@@ -25,8 +24,7 @@ public class Manager extends JFrame {
 
         btnExit = new JButton("EXIT");
         btnTicket = new JButton("TICKET");
-        btnRole = new JButton("ROLE");
-        btnUser = new JButton("USER");
+        btnRole = new JButton("ROLE & USER");
         btnPosition = new JButton("POSITIONS");
         btnRevenue = new JButton("REVENUE");
         btnWareHouse = new JButton("WAREHOUSE");
@@ -79,16 +77,13 @@ public class Manager extends JFrame {
             }
         });
 
-        panel.add(btnUser);
-        btnUser.setBounds(600,340,400,70);
-
         panel.add(btnPosition);
-        btnPosition.setBounds(600,460,400,70);
+        btnPosition.setBounds(600,340,400,70);
 
         panel.add(btnRevenue);
-        btnRevenue.setBounds(600,580,400,70);
+        btnRevenue.setBounds(600,460,400,70);
 
         panel.add(btnWareHouse);
-        btnWareHouse.setBounds(600,700,400,70);
+        btnWareHouse.setBounds(600,580,400,70);
     }
 }
