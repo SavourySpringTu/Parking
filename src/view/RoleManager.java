@@ -10,6 +10,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -137,11 +139,39 @@ public class RoleManager extends JFrame {
         panel.add(btnUpdateU);
         btnUpdateU.setBounds(1200, 170, 130, 35);
         btnUpdateU.setBackground(Color.ORANGE);
-
+        btnUpdateU.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                idU = tfIdU.getText();
+                nameU = tfNameU.getText();
+                passwordU = tfPasswordU.getText();
+                idRoleU = tfIdRoleU.getText();
+                try {
+                    updateUser(idU,nameU,passwordU,idRoleU);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         // ================== BUTTON DELETE USER =======================
         panel.add(btnDeleteU);
         btnDeleteU.setBounds(1200, 220, 130, 35);
         btnDeleteU.setBackground(Color.RED);
+        btnDeleteU.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                idU = tfIdU.getText();
+                try {
+                    deleteUser(idU);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         // =================== BUTTON ADD ROLE =====================
         panel.add(btnAddRole);
@@ -220,6 +250,15 @@ public class RoleManager extends JFrame {
         table.setRowHeight(30);
         table.setModel(showList(model));
 
+        //================== ROLE MOUSE CLICK ========================
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                clickTableRole();
+            }
+        });
+
         // ================= JScrollPane ROLE ========================
         panel.add(sp);
         sp.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -234,6 +273,14 @@ public class RoleManager extends JFrame {
         tableU.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
         tableU.setRowHeight(30);
         tableU.setModel(showListU(modelU));
+        // ================== USER MOUSE CLICK =====================
+        tableU.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                clickTableUser();
+            }
+        });
 
         // ================= JScrollPane USER ========================
         panel.add(spU);
@@ -306,7 +353,12 @@ public class RoleManager extends JFrame {
         ResultSet rs = pstmt.executeQuery();
         table.setModel(DbUtils.resultSetToTableModel(rs));
     }
-
+    public void clickTableRole(){
+        int i = table.getSelectedRow();
+        model = (DefaultTableModel) table.getModel();
+        tfId.setText(model.getValueAt(i,0).toString());
+        tfName.setText(model.getValueAt(i,1).toString());
+    }
     // =================== LIST USER =======================
     public DefaultTableModel showListU(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) tableU.getModel();
@@ -327,7 +379,14 @@ public class RoleManager extends JFrame {
         ResultSet rs = pstmt.executeQuery();
         tableU.setModel(DbUtils.resultSetToTableModel(rs));
     }
-
+    public void clickTableUser(){
+        int i = tableU.getSelectedRow();
+        modelU = (DefaultTableModel) tableU.getModel();
+        tfIdU.setText(modelU.getValueAt(i,0).toString());
+        tfNameU.setText(modelU.getValueAt(i,1).toString());
+        tfPasswordU.setText(modelU.getValueAt(i,2).toString());
+        tfIdRoleU.setText(modelU.getValueAt(i,3).toString());
+    }
     // ======================= ADD USER =======================
     public void addUser(String id,String name,String password,String role) throws SQLException, ClassNotFoundException {
         if(check.checkString(id)==true){
@@ -344,5 +403,29 @@ public class RoleManager extends JFrame {
             // notice
         }
 
+    }
+    // ===================== UPDATE USER ======================
+    public void updateUser(String id,String name,String password,String role) throws SQLException, ClassNotFoundException {
+        if(check.checkString(id)==true) {
+            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE user SET name=?,password=?,id_role=? WHERE id=?");
+            pstmt.setString(4, id);
+            pstmt.setString(1, name);
+            pstmt.setString(2, password);
+            pstmt.setString(3, role);
+            pstmt.executeUpdate();
+            pstmt.close();
+            refreshTableU();
+        } else{
+            // notice
+        }
+    }
+
+    //======================== DELETE USER =======================
+    public void deleteUser(String id) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("DELETE FROM user WHERE id=?");
+        pstmt.setString(1, id);
+        pstmt.executeUpdate();
+        pstmt.close();
+        refreshTable();
     }
 }
