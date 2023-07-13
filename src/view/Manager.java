@@ -79,6 +79,19 @@ public class Manager extends JFrame {
 
         panel.add(btnPosition);
         btnPosition.setBounds(600,340,400,70);
+        btnPosition.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PositionManager frame = new PositionManager();
+                    frame.setVisible(true);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         panel.add(btnRevenue);
         btnRevenue.setBounds(600,460,400,70);
