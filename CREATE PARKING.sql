@@ -1,3 +1,4 @@
+
 DROP DATABASE parking;
 CREATE DATABASE parking;
 USE parking;
@@ -6,47 +7,58 @@ CREATE TABLE role(
     name CHAR(20)
 );
 CREATE TABLE user(
-	id CHAR(10) PRIMARY KEY NOT NULL,
+	username CHAR(20) PRIMARY KEY NOT NULL,
     name CHAR(20),
     password CHAR(20),
     id_role CHAR(10),
+    status BOOLEAN,
 	FOREIGN KEY (id_role) REFERENCES role(id)
 );
-CREATE TABLE revenue(
-	id DATE PRIMARY KEY NOT NULL,
-    total int
+CREATE TABLE type(
+	id CHAR(10) PRIMARY KEY NOT NULL,
+    timestart TIME,
+    price INT
 );
 CREATE TABLE positions(
-	id INT PRIMARY KEY NOT NULL,
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     type BOOLEAN,
-    camera CHAR(30),
+    camera CHAR(100),
+    status BOOLEAN
+);
+CREATE TABLE warehouse(
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    timein DATETIME,
+    timeout DATETIME,
+    id_ticket INT,
+    status BOOLEAN
+);
+CREATE TABLE customer(
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name CHAR(10),
+    number_phone CHAR(15),
+    number_vehicle CHAR(10),
     status BOOLEAN
 );
 CREATE TABLE ticket(
-	id INT PRIMARY KEY NOT NULL,
-    timein TIME,
-    timeout TIME,
-    number CHAR(10),
-    price INT,
-    type_ticket BOOLEAN,
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    timein DATETIME,
+    timeout DATETIME,
+    number_vehicle CHAR(10),
     type_vehicle BOOLEAN,
-    id_revenue DATE,
-    id_positions INT,
-    id_user CHAR(10),
-    FOREIGN KEY (id_revenue) REFERENCES revenue(id),
-    FOREIGN KEY (id_positions) REFERENCES positions(id),
-	FOREIGN KEY (id_user) REFERENCES user(id) 
+    id_type CHAR(10),
+    id_position INT,
+    id_user CHAR(20),
+    id_warehouse INT,
+    id_customer INT,
+    FOREIGN KEY (id_type) REFERENCES type(id),
+    FOREIGN KEY (id_position) REFERENCES positions(id),
+	FOREIGN KEY (id_user) REFERENCES user(username) ,
+    FOREIGN KEY (id_warehouse) REFERENCES warehouse(id),
+    FOREIGN KEY (id_customer) REFERENCES customer(id)
 );
 CREATE TABLE image(
-	id int PRIMARY KEY NOT NULL,
+	id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
     url CHAR(100),
-    id_ticket INT,
-    FOREIGN KEY (id_ticket) REFERENCES ticket(id)
-);
-CREATE TABLE warehouse(
-	id INT PRIMARY KEY NOT NULL,
-    timein TIME,
-    timeout TIME,
     id_ticket INT,
     FOREIGN KEY (id_ticket) REFERENCES ticket(id)
 );

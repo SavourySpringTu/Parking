@@ -7,6 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import Connection.ConnectionSQL;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 public class Login extends JFrame {
     private static JFrame frame;
@@ -20,12 +24,10 @@ public class Login extends JFrame {
     private String user;
     private String password;
     private String id_role;
-    public static void main (String[] args){
+    public static void main (String[] args) throws WriterException {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-//                    frame = new Login();
-//                    frame.setVisible(true);
                     Manager manager = new Manager();
                     manager.setVisible(true);
                 } catch (Exception e) {
@@ -72,7 +74,6 @@ public class Login extends JFrame {
                     while(rs.next()){
                         if(rs.getString("id").equals(user)==true && rs.getString("password").equals(password)==true){
                             if(rs.getString("id_role").equals("R01")==true){
-                                System.out.println("Vao manager");
                                 Manager manager = new Manager();
                                 manager.setVisible(true);
                                 dispose();

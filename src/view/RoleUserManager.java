@@ -15,9 +15,8 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class RoleManager extends JFrame {
+public class RoleUserManager extends JFrame {
     private JFrame jFrame;
     private JPanel panel;
     private JTable table;
@@ -53,7 +52,7 @@ public class RoleManager extends JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private DefaultTableModel modelU = new DefaultTableModel();
     private Check check = new Check();
-    public RoleManager() throws SQLException, ClassNotFoundException {
+    public RoleUserManager() throws SQLException, ClassNotFoundException {
         connectionSQL = new ConnectionSQL();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,10 +72,10 @@ public class RoleManager extends JFrame {
         btnAddRole = new JButton("ADD");
         btnUpdateRole = new JButton("UPDATE");
         btnDeleteRole = new JButton("DELETE");
-        lbIdU = new JLabel("Id");
-        lbNameU = new JLabel("Name");
-        lbPasswordU = new JLabel("Password");
-        lbIdRoleU = new JLabel("Id Role");
+        lbIdU = new JLabel("USER NAME");
+        lbNameU = new JLabel("NAME");
+        lbPasswordU = new JLabel("PASSWORD");
+        lbIdRoleU = new JLabel("ID ROLE");
         tfIdRoleU = new JTextField();
         tfNameU = new JTextField();
         tfPasswordU = new JTextField();
@@ -92,9 +91,9 @@ public class RoleManager extends JFrame {
         panel.add(lbName);
         lbName.setBounds(30,160,100,50);
         panel.add(tfId);
-        tfId.setBounds(80,120,100,35);
+        tfId.setBounds(80,120,200,35);
         panel.add(tfName);
-        tfName.setBounds(80,170,100,35);
+        tfName.setBounds(80,170,200,35);
 
         panel.add(lbIdU);
         lbIdU.setBounds(950,110,100,50);
@@ -106,17 +105,17 @@ public class RoleManager extends JFrame {
         lbIdRoleU.setBounds(950,260,100,50);
 
         panel.add(tfIdU);
-        tfIdU.setBounds(1030,120,130,35);
+        tfIdU.setBounds(1030,120,200,35);
         panel.add(tfNameU);
-        tfNameU.setBounds(1030,170,130,35);
+        tfNameU.setBounds(1030,170,200,35);
         panel.add(tfPasswordU);
-        tfPasswordU.setBounds(1030,220,130,35);
+        tfPasswordU.setBounds(1030,220,200,35);
         panel.add(tfIdRoleU);
-        tfIdRoleU.setBounds(1030,270,130,35);
+        tfIdRoleU.setBounds(1030,270,200,35);
 
         // =================== ADD USER ======================
         panel.add(btnAddU);
-        btnAddU.setBounds(1200, 120, 130, 35);
+        btnAddU.setBounds(1300, 120, 130, 35);
         btnAddU.setBackground(Color.green);
         btnAddU.addActionListener(new ActionListener() {
             @Override
@@ -137,7 +136,7 @@ public class RoleManager extends JFrame {
 
         // ================== BUTTON UPDATE USER ======================
         panel.add(btnUpdateU);
-        btnUpdateU.setBounds(1200, 170, 130, 35);
+        btnUpdateU.setBounds(1300, 170, 130, 35);
         btnUpdateU.setBackground(Color.ORANGE);
         btnUpdateU.addActionListener(new ActionListener() {
             @Override
@@ -157,7 +156,7 @@ public class RoleManager extends JFrame {
         });
         // ================== BUTTON DELETE USER =======================
         panel.add(btnDeleteU);
-        btnDeleteU.setBounds(1200, 220, 130, 35);
+        btnDeleteU.setBounds(1300, 220, 130, 35);
         btnDeleteU.setBackground(Color.RED);
         btnDeleteU.addActionListener(new ActionListener() {
             @Override
@@ -175,7 +174,7 @@ public class RoleManager extends JFrame {
 
         // =================== BUTTON ADD ROLE =====================
         panel.add(btnAddRole);
-        btnAddRole.setBounds(250, 120, 130, 35);
+        btnAddRole.setBounds(350, 120, 130, 35);
         btnAddRole.setBackground(Color.green);
         btnAddRole.addActionListener(new ActionListener() {
             @Override
@@ -194,7 +193,7 @@ public class RoleManager extends JFrame {
 
         // ====================== BUTTON UPDATE ROLE ==================
         panel.add(btnUpdateRole);
-        btnUpdateRole.setBounds(250, 170, 130, 35);
+        btnUpdateRole.setBounds(350, 170, 130, 35);
         btnUpdateRole.setBackground(Color.orange);
         btnUpdateRole.addActionListener(new ActionListener() {
             @Override
@@ -213,7 +212,7 @@ public class RoleManager extends JFrame {
 
         // =================== BUTTON DELETE ROLE ==================
         panel.add(btnDeleteRole);
-        btnDeleteRole.setBounds(250, 220, 130, 35);
+        btnDeleteRole.setBounds(350, 220, 130, 35);
         btnDeleteRole.setBackground(Color.RED);
         btnDeleteRole.addActionListener(new ActionListener() {
             @Override
@@ -245,6 +244,7 @@ public class RoleManager extends JFrame {
         // =================== TABLE ROLE ============================
         table.setForeground(new Color(0, 0, 0));
         table.setBackground(new Color(255, 255, 255));
+        table.getTableHeader().setBackground(Color.CYAN);
         table.setFont(new Font("Serif", Font.PLAIN, 20));
         table.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
         table.setRowHeight(30);
@@ -269,6 +269,7 @@ public class RoleManager extends JFrame {
         // =================== TABLE USER ============================
         tableU.setForeground(new Color(0, 0, 0));
         tableU.setBackground(new Color(255, 255, 255));
+        tableU.getTableHeader().setBackground(Color.CYAN);
         tableU.setFont(new Font("Serif", Font.PLAIN, 20));
         tableU.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
         tableU.setRowHeight(30);
@@ -362,13 +363,13 @@ public class RoleManager extends JFrame {
     // =================== LIST USER =======================
     public DefaultTableModel showListU(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) tableU.getModel();
-        String header[] = {"Id","Name","Password","Id Role"};
+        String header[] = {"User name","Name","Password","Id Role"};
         model.setColumnIdentifiers(header);
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM user");
         ResultSet rs = pstmt.executeQuery();
         while(rs.next())
         {
-            String row [] = {rs.getString("id"),rs.getString("name"),rs.getString("password"),rs.getString("id_role")};
+            String row [] = {rs.getString("username"),rs.getString("name"),rs.getString("password"),rs.getString("id_role")};
             model.addRow(row);
         }
         pstmt.close();
@@ -390,7 +391,7 @@ public class RoleManager extends JFrame {
     // ======================= ADD USER =======================
     public void addUser(String id,String name,String password,String role) throws SQLException, ClassNotFoundException {
         if(check.checkString(id)==true){
-            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO user(id,name,password,id_role) VALUES (?,?,?,?)");
+            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO user(username,name,password,id_role) VALUES (?,?,?,?)");
             pstmt.setString(1,id);
             pstmt.setString(2,name);
             pstmt.setString(3,password);

@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -32,6 +33,7 @@ public class Manager extends JFrame {
         // ==================== BUTTON EXIT ====================
         panel.add(btnExit);
         btnExit.setBounds(10,10,100,50);
+        btnExit.setBackground(Color.RED);
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,9 +55,15 @@ public class Manager extends JFrame {
         btnTicket.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TicketManager ticketManager = new TicketManager();
-                ticketManager.setVisible(true);
-                dispose();
+                try {
+                    TicketManager ticketManager = new TicketManager();
+                    ticketManager.setVisible(true);
+                    dispose();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -66,7 +74,7 @@ public class Manager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    RoleManager roleManager = new RoleManager();
+                    RoleUserManager roleManager = new RoleUserManager();
                     roleManager.setVisible(true);
                     dispose();
                 } catch (SQLException ex) {
@@ -85,6 +93,7 @@ public class Manager extends JFrame {
                 try {
                     PositionManager frame = new PositionManager();
                     frame.setVisible(true);
+                    dispose();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
