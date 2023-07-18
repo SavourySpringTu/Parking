@@ -1,4 +1,4 @@
-package About;
+package Process;
 
 public class Check {
     public boolean checkString(String id){

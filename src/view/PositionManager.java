@@ -1,7 +1,6 @@
 package view;
 
-import About.Check;
-import About.DbUtils;
+import Process.*;
 import Connection.ConnectionSQL;
 
 import javax.swing.*;
@@ -14,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class PositionManager extends JFrame {
     private JFrame frame;
@@ -31,11 +29,12 @@ public class PositionManager extends JFrame {
     private JButton btnExit;
     private JTable table;
     private JScrollPane sp;
-    private ConnectionSQL connectionSQL;
+    private ConnectionSQL connectionSQL = new ConnectionSQL();
     private DefaultTableModel model = new DefaultTableModel();
     private Check check = new Check();
-    public PositionManager() throws SQLException, ClassNotFoundException {
-        connectionSQL = new ConnectionSQL();
+    private Positions positions = new Positions();
+    private String user1;
+    public PositionManager(String user) throws SQLException, ClassNotFoundException {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(170,60,1600, 1000);
@@ -80,7 +79,8 @@ public class PositionManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    addPosition();
+                    positions.addPosition(Boolean.parseBoolean((String) tfType.getItemAt(tfType.getSelectedIndex())),tfCamera.getText());
+                    refreshTable();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
@@ -96,7 +96,8 @@ public class PositionManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    updatePosition();
+                    positions.updatePosition(tfId.getText(),Boolean.parseBoolean((String) tfType.getItemAt(tfType.getSelectedIndex())),tfCamera.getText());
+                    refreshTable();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
@@ -112,7 +113,8 @@ public class PositionManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    deletePosition();
+                    positions.deletePosition(tfId.getText());
+                    refreshTable();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
@@ -128,7 +130,7 @@ public class PositionManager extends JFrame {
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manager manager = new Manager();
+                Manager manager = new Manager(user1);
                 manager.setVisible(true);
                 dispose();
             }
@@ -187,34 +189,5 @@ public class PositionManager extends JFrame {
             tfType.setSelectedIndex(0);
         }
         tfCamera.setText(model.getValueAt(i,2).toString());
-    }
-    // =========================== ADD ============================
-    public void addPosition() throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT positions(type,camera,status) VALUES (?,?,?)");
-        pstmt.setBoolean(1, Boolean.parseBoolean((String) tfType.getItemAt(tfType.getSelectedIndex())));
-        pstmt.setString(2, tfCamera.getText());
-        Boolean status = false;
-        pstmt.setBoolean(3, status);
-        pstmt.executeUpdate();
-        pstmt.close();
-        refreshTable();
-    }
-    // ======================== UPDATE ===============================
-    public void updatePosition() throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE positions SET camera=?,type=? WHERE id=?");
-        pstmt.setBoolean(2, Boolean.parseBoolean((String) tfType.getItemAt(tfType.getSelectedIndex())));
-        pstmt.setString(1, tfCamera.getText());
-        pstmt.setInt(3, Integer.parseInt(tfId.getText()));
-        pstmt.executeUpdate();
-        pstmt.close();
-        refreshTable();
-    }
-    // ========================== DELETE =============================
-    public void deletePosition() throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("DELETE FROM positions WHERE id=?");
-        pstmt.setInt(1, Integer.parseInt(tfId.getText()));
-        pstmt.executeUpdate();
-        pstmt.close();
-        refreshTable();
     }
 }

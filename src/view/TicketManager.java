@@ -1,7 +1,6 @@
 package view;
 
-import About.Check;
-import About.DbUtils;
+import Process.*;
 import Connection.ConnectionSQL;
 
 import javax.swing.*;
@@ -14,14 +13,10 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Timer;
+
 
 public class TicketManager extends JFrame{
-    private JFrame frame;
     private JPanel panel;
     private JLabel lbId;
     private JLabel lbNumber;
@@ -29,6 +24,8 @@ public class TicketManager extends JFrame{
     private JLabel lbPosition;
     private JLabel lbCustomer;
     private JLabel lbTypeVehicle;
+    private JLabel lbImage;
+    private ImageIcon imageIcon;
     private JTextField tfId;
     private JTextField tfNumber;
     private JComboBox tfTypeTicket;
@@ -39,15 +36,16 @@ public class TicketManager extends JFrame{
     private JButton btnAdd;
     private JButton btnUpdate;
     private JButton btnExport;
+    private JButton choseImage1;
+    private JButton choseImage2;
     private JTable table;
     private JScrollPane sp;
     private DefaultTableModel model = new DefaultTableModel();
-
-    private ConnectionSQL connectionSQL;
-    private Check check = new Check();
-    public TicketManager() throws SQLException, ClassNotFoundException {
-        connectionSQL = new ConnectionSQL();
-
+    private String user1;
+    private ConnectionSQL connectionSQL = new ConnectionSQL();
+    private Ticket ticket = new Ticket();
+    public TicketManager(String user) throws SQLException, ClassNotFoundException {
+        user1 = user;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(0,0,1960, 1080);
         panel = new JPanel();
@@ -69,6 +67,8 @@ public class TicketManager extends JFrame{
         String TypeVehicle[] ={"Car","Motorbike"};
         tfTypeVehicle = new JComboBox(TypeVehicle);
         lbTypeTicket = new JLabel("Type");
+        choseImage1 = new JButton("CHOSE");
+        choseImage2 = new JButton("CHOSE");
         tfTypeTicket = new JComboBox();
         loadTypeTicket();
 
@@ -105,6 +105,11 @@ public class TicketManager extends JFrame{
         panel.add(tfTypeVehicle);
         tfTypeVehicle.setBounds(550,210,200,35);
 
+        ImageIcon image = new ImageIcon("D:\\Doc\\Java\\IntelliJ Project\\Parking---Swing---MySQL---OpenCV\\src\\Image\\a.png");
+        lbImage= new JLabel(image,JLabel.CENTER);
+        lbImage.setBounds(800,100,300,250);
+        panel.add(lbImage);
+
         panel.add(btnAdd);
         btnAdd.setBounds(1500, 130, 130, 35);
         btnAdd.setBackground(Color.GREEN);
@@ -112,7 +117,8 @@ public class TicketManager extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    addTicket();
+                    ticket.addTicket(tfNumber.getText(), (String) tfTypeTicket.getItemAt(tfTypeTicket.getSelectedIndex()),tfPosition.getText(),user1);
+                    refreshTable();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (ClassNotFoundException ex) {
@@ -124,9 +130,14 @@ public class TicketManager extends JFrame{
         panel.add(btnUpdate);
         btnUpdate.setBounds(1500, 180, 130, 35);
         btnUpdate.setBackground(Color.ORANGE);
+
         panel.add(btnExport);
         btnExport.setBounds(1500, 230, 130, 35);
         btnExport.setBackground(Color.red);
+
+        panel.add(choseImage1);
+        choseImage1.setBounds(885, 375, 130, 35);
+        btnExit.setBackground(Color.yellow);
 
         panel.add(btnExit);
         btnExit.setBounds(10,10,100,50);
@@ -134,7 +145,7 @@ public class TicketManager extends JFrame{
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manager manager = new Manager();
+                Manager manager = new Manager(user1);
                 manager.setVisible(true);
                 dispose();
             }
@@ -144,6 +155,7 @@ public class TicketManager extends JFrame{
         table.setBackground(new Color(255, 255, 255));
         table.setFont(new Font("Serif", Font.PLAIN, 20));
         table.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
+        table.getTableHeader().setBackground(Color.CYAN);
         table.setRowHeight(30);
         table.setModel(showList(model));
         // ================== MOUSE CLICK =====================
@@ -159,9 +171,10 @@ public class TicketManager extends JFrame{
         panel.add(sp);
         sp.setFont(new Font("Serif", Font.PLAIN, 20));
         JScrollPane scrollPaneU = new JScrollPane(table);
-        scrollPaneU.setBounds(100, 400, 1700, 600);
+        scrollPaneU.setBounds(100, 450, 1700, 550);
         getContentPane().add(scrollPaneU);
     }
+
     // =================== LIST =======================
     public DefaultTableModel showList(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) table.getModel();
@@ -205,23 +218,6 @@ public class TicketManager extends JFrame{
         tfNumber.setText(model.getValueAt(i,3).toString());
     }
 
-    // ========================== ADD =============================
-    public void addTicket() throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO ticket(timein,timeout,number_vehicle,id_type,id_position,id_user,id_warehouse,id_customer) VALUES (?,?,?,?,?,?,?,?)");
-        LocalDateTime date = LocalDateTime.now();
-        pstmt.setObject(1,date);
-        pstmt.setObject(2,null);
-        pstmt.setString(3,tfNumber.getText());
-        pstmt.setString(4, (String) tfTypeTicket.getItemAt(tfTypeTicket.getSelectedIndex()));
-        pstmt.setString(5,tfPosition.getText());
-        pstmt.setString(6,"tubui");
-        pstmt.setString(7,null);
-        pstmt.setString(8,null);
-        pstmt.executeUpdate();
-        pstmt.close();
-        refreshTable();
-    }
-
     // =================== ABOUT ============================
     public void loadTypeTicket() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT id FROM type");
@@ -230,6 +226,9 @@ public class TicketManager extends JFrame{
             tfTypeTicket.addItem(rs.getString("id"));
         }
         pstmt.close();
+    }
+    public void loadImage(){
+
     }
 
 }

@@ -15,7 +15,9 @@ public class Manager extends JFrame {
     private JButton btnWareHouse;
     private JButton btnRevenue;
     private JButton btnExit;
-    public Manager(){
+    private String user1;
+    public Manager(String user){
+        user1 = user;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(170,60,1600, 1000);
         panel = new JPanel();
@@ -56,7 +58,7 @@ public class Manager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    TicketManager ticketManager = new TicketManager();
+                    TicketManager ticketManager = new TicketManager(user1);
                     ticketManager.setVisible(true);
                     dispose();
                 } catch (SQLException ex) {
@@ -74,7 +76,7 @@ public class Manager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    RoleUserManager roleManager = new RoleUserManager();
+                    RoleUserManager roleManager = new RoleUserManager(user1);
                     roleManager.setVisible(true);
                     dispose();
                 } catch (SQLException ex) {
@@ -91,7 +93,7 @@ public class Manager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    PositionManager frame = new PositionManager();
+                    PositionManager frame = new PositionManager(user1);
                     frame.setVisible(true);
                     dispose();
                 } catch (SQLException ex) {

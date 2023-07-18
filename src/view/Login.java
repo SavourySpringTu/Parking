@@ -7,13 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import Connection.ConnectionSQL;
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 
 public class Login extends JFrame {
-    private static JFrame frame;
     private JPanel panel;
     private JButton btnLogin;
     private JTextField tfUser;
@@ -23,12 +19,11 @@ public class Login extends JFrame {
     private ConnectionSQL connectionSQL;
     private String user;
     private String password;
-    private String id_role;
     public static void main (String[] args) throws WriterException {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Manager manager = new Manager();
+                    Manager manager = new Manager("tubui");
                     manager.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -74,13 +69,13 @@ public class Login extends JFrame {
                     while(rs.next()){
                         if(rs.getString("id").equals(user)==true && rs.getString("password").equals(password)==true){
                             if(rs.getString("id_role").equals("R01")==true){
-                                Manager manager = new Manager();
+                                Manager manager = new Manager(user);
                                 manager.setVisible(true);
                                 dispose();
                             }else{
-                                User user = new User();
-                                user.setVisible(true);
-                                dispose();
+//                                User user = new User();
+//                                user.setVisible(true);
+//                                dispose();
                             }
                         }else{
                             notification.setText("EROR");

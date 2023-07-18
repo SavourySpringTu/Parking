@@ -60,6 +60,7 @@ CREATE TABLE image(
 	id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
     url CHAR(100),
     id_ticket INT,
+    type BOOLEAN,
     FOREIGN KEY (id_ticket) REFERENCES ticket(id)
 );
 

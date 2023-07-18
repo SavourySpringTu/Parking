@@ -10,7 +10,6 @@ public class ConnectionSQL {
         try{
             String connectionURL="jdbc:mysql://localhost:3306/parking";
             Connection connection = DriverManager.getConnection(connectionURL, "root", "111101");
-            System.out.println("Kết nối sql thành công!");
             return connection;
         } catch (SQLException e1) {
             // TODO Auto-generated catch block
