@@ -16,7 +16,9 @@ CREATE TABLE user(
 );
 CREATE TABLE type(
 	id CHAR(10) PRIMARY KEY NOT NULL,
+    type BOOLEAN,
     timestart TIME,
+    timeend TIME,
     price INT
 );
 CREATE TABLE positions(
@@ -35,8 +37,11 @@ CREATE TABLE warehouse(
 CREATE TABLE customer(
 	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name CHAR(10),
+    time DATETIME,
+    day INT,
     number_phone CHAR(15),
     number_vehicle CHAR(10),
+    type BOOLEAN,
     status BOOLEAN
 );
 CREATE TABLE ticket(
@@ -61,7 +66,32 @@ CREATE TABLE image(
     url CHAR(100),
     id_ticket INT,
     type BOOLEAN,
+    status BOOLEAN,
     FOREIGN KEY (id_ticket) REFERENCES ticket(id)
 );
 
 INSERT INTO role(id,name) VALUES ('R01','Admin');
+INSERT INTO role(id,name) VALUES ('R02','Cashier');
+
+INSERT INTO user(username,name,password,id_role,status) VALUES ('tubui','Tu','123','R01',0);
+INSERT INTO user(username,name,password,id_role,status) VALUES ('giabao','Bao','123','R01',0);
+INSERT INTO user(username,name,password,id_role,status) VALUES ('khaibui','Khai','123','R02',0);
+INSERT INTO user(username,name,password,id_role,status) VALUES ('thanhnhan','Nhan','123','R02',0);
+
+INSERT INTO positions(type,camera,status) VALUES (0,'abc',0);
+INSERT INTO positions(type,camera,status) VALUES (1,'abc',0);
+INSERT INTO positions(type,camera,status) VALUES (1,'abc',0);
+INSERT INTO positions(type,camera,status) VALUES (0,'abc',0);
+
+INSERT INTO type(id,type,price) VALUES ('T01',0,4000);
+INSERT INTO type(id,type,price) VALUES ('T02',1,6000);
+INSERT INTO type(id,timestart,timeend,price) VALUES ('T03','00:00:00','06:59:59',15000);
+INSERT INTO type(id,timestart,timeend,price) VALUES ('T04','07:00:00','16:59:59',5000);
+INSERT INTO type(id,timestart,timeend,price) VALUES ('T05','17:00:00','23:59:59',10000);
+INSERT INTO type(id,timestart,timeend,price) VALUES ('T06','00:00:00','06:59:59',17000);
+INSERT INTO type(id,timestart,timeend,price) VALUES ('T07','07:00:00','16:59:59',7000);
+INSERT INTO type(id,timestart,timeend,price) VALUES ('T08','17:00:00','23:59:59',12000);
+
+
+INSERT INTO customer(name,number_phone,number_vehicle,type,time,day,status) VALUES ('Bao','036201001464','59-h13784',0,'2023-07-28 00:00:00',15,0);
+INSERT INTO customer(name,number_phone,number_vehicle,type,time,day,status) VALUES ('Phuong','0907785775','30f22222',1,'2023-07-28 00:00:00',30,0);

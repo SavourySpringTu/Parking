@@ -29,6 +29,8 @@ public class PositionManager extends JFrame {
     private JButton btnExit;
     private JTable table;
     private JScrollPane sp;
+    private ImageIcon i;
+    private Image m;
     private ConnectionSQL connectionSQL = new ConnectionSQL();
     private DefaultTableModel model = new DefaultTableModel();
     private Check check = new Check();
@@ -59,22 +61,32 @@ public class PositionManager extends JFrame {
 
         panel.add(lbId);
         lbId.setBounds(950,110,100,50);
+        lbId.setFont(new Font("Verdana", Font.PLAIN, 18));
         panel.add(lbType);
         lbType.setBounds(950,160,100,50);
+        lbType.setFont(new Font("Verdana", Font.PLAIN, 18));
         panel.add(lbCamera);
         lbCamera.setBounds(950,210,100,50);
+        lbCamera.setFont(new Font("Verdana", Font.PLAIN, 18));
 
         panel.add(tfId);
         tfId.setBounds(1030,120,130,35);
-        tfId.setEditable(false);
+        tfId.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfId.setEnabled(false);
         panel.add(tfCamera);
         tfCamera.setBounds(1030,220,130,35);
+        tfCamera.setFont(new Font("Verdana", Font.PLAIN, 18));
         panel.add(tfType);
         tfType.setBounds(1030,170,130,35);
+        tfType.setFont(new Font("Verdana", Font.PLAIN, 18));
 
         panel.add(btnAdd);
         btnAdd.setBounds(1200, 120, 130, 35);
-        btnAdd.setBackground(Color.green);
+        btnAdd.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnInsert.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnAdd.setIcon(new ImageIcon(m));
+        btnAdd.setBackground(new Color(42, 115, 196));
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +103,11 @@ public class PositionManager extends JFrame {
 
         panel.add(btnUpdate);
         btnUpdate.setBounds(1200, 170, 130, 35);
-        btnUpdate.setBackground(Color.ORANGE);
+        btnUpdate.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnUpdate.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnUpdate.setIcon(new ImageIcon(m));
+        btnUpdate.setBackground(new Color(42, 115, 196));
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,7 +124,11 @@ public class PositionManager extends JFrame {
 
         panel.add(btnDelete);
         btnDelete.setBounds(1200, 220, 130, 35);
-        btnDelete.setBackground(Color.RED);
+        btnDelete.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnDelete.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnDelete.setIcon(new ImageIcon(m));
+        btnDelete.setBackground(new Color(42, 115, 196));
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,7 +146,10 @@ public class PositionManager extends JFrame {
         // ================== BUTTON EXIT ======================
         panel.add(btnExit);
         btnExit.setBounds(10,10,100,50);
-        btnExit.setBackground(Color.RED);
+        i = new ImageIcon("src\\icon\\Logout.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnExit.setIcon(new ImageIcon(m));
+        btnExit.setBackground(new Color(42, 115, 196));
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,6 +163,8 @@ public class PositionManager extends JFrame {
         table.setBackground(new Color(255, 255, 255));
         table.setFont(new Font("Serif", Font.PLAIN, 20));
         table.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setBackground(new Color(42, 115, 196));
         table.setRowHeight(30);
         table.setModel(showList(model));
         // ================== USER MOUSE CLICK =====================
@@ -177,7 +202,8 @@ public class PositionManager extends JFrame {
     public void refreshTable() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM positions");
         ResultSet rs = pstmt.executeQuery();
-        table.setModel(DbUtils.resultSetToTableModel(rs));
+        String header[] = {"Id","Type","Camera","Status"};
+        table.setModel(DbUtils.resultSetToTableModel(rs,header));
     }
     public void clickTableUser(){
         int i = table.getSelectedRow();

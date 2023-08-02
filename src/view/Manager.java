@@ -16,6 +16,8 @@ public class Manager extends JFrame {
     private JButton btnRevenue;
     private JButton btnExit;
     private String user1;
+    private ImageIcon i;
+    private Image m;
     public Manager(String user){
         user1 = user;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +37,11 @@ public class Manager extends JFrame {
         // ==================== BUTTON EXIT ====================
         panel.add(btnExit);
         btnExit.setBounds(10,10,100,50);
-        btnExit.setBackground(Color.RED);
+        btnExit.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\logout.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnExit.setIcon(new ImageIcon(m));
+        btnExit.setBackground(new Color(42, 115, 196));
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,6 +60,9 @@ public class Manager extends JFrame {
         // ==================== BUTTON TICKET =====================
         panel.add(btnTicket);
         btnTicket.setBounds(600,100,400,70);
+        btnTicket.setFont(new Font("Verdana", Font.PLAIN, 18));
+        btnTicket.setForeground(Color.WHITE);
+        btnTicket.setBackground(new Color(42, 115, 196));
         btnTicket.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,6 +81,9 @@ public class Manager extends JFrame {
         // ===================== BUTTON ROLE =====================
         panel.add(btnRole);
         btnRole.setBounds(600,220,400,70);
+        btnRole.setFont(new Font("Verdana", Font.PLAIN, 18));
+        btnRole.setForeground(Color.WHITE);
+        btnRole.setBackground(new Color(42, 115, 196));
         btnRole.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,6 +101,9 @@ public class Manager extends JFrame {
 
         panel.add(btnPosition);
         btnPosition.setBounds(600,340,400,70);
+        btnPosition.setFont(new Font("Verdana", Font.PLAIN, 18));
+        btnPosition.setForeground(Color.WHITE);
+        btnPosition.setBackground(new Color(42, 115, 196));
         btnPosition.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,8 +121,14 @@ public class Manager extends JFrame {
 
         panel.add(btnRevenue);
         btnRevenue.setBounds(600,460,400,70);
+        btnRevenue.setFont(new Font("Verdana", Font.PLAIN, 18));
+        btnRevenue.setForeground(Color.WHITE);
+        btnRevenue.setBackground(new Color(42, 115, 196));
 
         panel.add(btnWareHouse);
         btnWareHouse.setBounds(600,580,400,70);
+        btnWareHouse.setFont(new Font("Verdana", Font.PLAIN, 18));
+        btnWareHouse.setForeground(Color.WHITE);
+        btnWareHouse.setBackground(new Color(42, 115, 196));
     }
 }

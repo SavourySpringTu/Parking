@@ -2,7 +2,9 @@ package Process;
 
 import Connection.ConnectionSQL;
 
+import javax.swing.*;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class User {
@@ -40,9 +42,40 @@ public class User {
 
     //======================== DELETE USER =======================
     public void deleteUser(String id) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("DELETE FROM user WHERE id=?");
+        if(checkDeleteUser(id)==false){
+            JOptionPane.showMessageDialog(null, "Cannot Delete!");
+            return;
+        }
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "DELETE FROM user WHERE id=?");
         pstmt.setString(1, id);
         pstmt.executeUpdate();
         pstmt.close();
+    }
+    // =================== Login  ===================
+    public String[] login(String user,String password) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "SELECT username,password,id_role FROM user");
+        ResultSet rs = pstmt.executeQuery();
+        String resul[]={"",""};
+        while(rs.next()){
+            if(rs.getString("username").equals(user)==true && rs.getString("password").equals(password)==true){
+                resul[0] = rs.getString("username");
+                resul[1] = rs.getString("id_role");
+                return resul;
+            }
+        }
+        return null;
+    }
+    public boolean checkDeleteUser(String user) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "SELECT * FROM ticket");
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()){
+            if(rs.getString("id_user").equals(user)==true){
+                return false;
+            }
+        }
+        return true;
     }
 }

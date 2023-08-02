@@ -10,9 +10,10 @@ public class Role {
     private ConnectionSQL connectionSQL = new ConnectionSQL();
     public void addRole(String id,String name) throws SQLException, ClassNotFoundException {
         if(check.checkString(id)==true){
-            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO role(id,name) VALUES (?,?)");
+            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO role(id,name,status) VALUES (?,?,?)");
             pstmt.setString(1,id);
             pstmt.setString(2,name);
+            pstmt.setBoolean(3,false);
             pstmt.executeUpdate();
             pstmt.close();
         }
@@ -21,11 +22,12 @@ public class Role {
         }
 
     }
-    public void updateRole(String id, String name) throws SQLException, ClassNotFoundException {
+    public void updateRole(String id, String name,Boolean status) throws SQLException, ClassNotFoundException {
         if(check.checkString(id)==true) {
-            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE role SET name=? WHERE id=?");
+            PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE role SET name=?,status=? WHERE id=?");
             pstmt.setString(1, name);
-            pstmt.setString(2, id);
+            pstmt.setString(3, id);
+            pstmt.setBoolean(2,status);
             pstmt.executeUpdate();
             pstmt.close();
         } else{

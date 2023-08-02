@@ -7,7 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.util.Vector;
 
 public class DbUtils {
-    public static TableModel resultSetToTableModel(ResultSet rs) {
+    public static TableModel resultSetToTableModel(ResultSet rs,String a[]) {
         try {
             ResultSetMetaData metaData = rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();
@@ -15,7 +15,7 @@ public class DbUtils {
 
             // Get the column names
             for (int column = 0; column < numberOfColumns; column++) {
-                columnNames.addElement(metaData.getColumnLabel(column + 1));
+                columnNames.addElement(a[column]);
             }
 
             // Get all rows.

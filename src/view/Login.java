@@ -1,11 +1,14 @@
 package view;
 
+import Process.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+
 import Connection.ConnectionSQL;
 import com.google.zxing.WriterException;
 
@@ -13,25 +16,30 @@ public class Login extends JFrame {
     private JPanel panel;
     private JButton btnLogin;
     private JTextField tfUser;
-    private JTextField tfPassword;
+    private JPasswordField tfPassword;
     private JLabel label;
     private JLabel notification;
+    private ImageIcon i;
+    private Image m;
+    private User us = new User();
     private ConnectionSQL connectionSQL;
-    private String user;
-    private String password;
     public static void main (String[] args) throws WriterException {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
+                //try {
                 try {
-                    Manager manager = new Manager("tubui");
-                    manager.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Login login = new Login();
+                    login.setVisible(true);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
     }
     public Login() throws SQLException, ClassNotFoundException {
+        // ==================================
         connectionSQL = new ConnectionSQL();
         Statement stmt = connectionSQL.ConnectionSQL().createStatement();
 
@@ -43,7 +51,8 @@ public class Login extends JFrame {
         panel.setLayout(null);
 
         btnLogin = new JButton("Login");
-        tfPassword = new JTextField();
+        btnLogin.setForeground(Color.WHITE);
+        tfPassword = new JPasswordField();
         tfUser = new JTextField();
         label = new JLabel("PARKING");
         notification = new JLabel();
@@ -51,38 +60,39 @@ public class Login extends JFrame {
         panel.add(tfUser);
         tfUser.setColumns(10);
         tfUser.setBounds(275, 175, 200, 35);
+        tfUser.setFont(new Font("Verdana", Font.PLAIN, 18));
 
         panel.add(tfPassword);
         tfPassword.setColumns(10);
         tfPassword.setBounds(275, 220, 200, 35);
+        tfPassword.setFont(new Font("Verdana", Font.PLAIN, 18));
 
         // ==================== BUTTON LOGIN ====================
         panel.add(btnLogin);
         btnLogin.setBounds(310, 265, 130, 35);
+        btnLogin.setBackground(new Color(42, 115, 196));
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                user = tfUser.getText();
-                password = tfPassword.getText();
                 try {
-                    ResultSet rs = stmt.executeQuery("SELECT id,password,id_role FROM user");
-                    while(rs.next()){
-                        if(rs.getString("id").equals(user)==true && rs.getString("password").equals(password)==true){
-                            if(rs.getString("id_role").equals("R01")==true){
-                                Manager manager = new Manager(user);
-                                manager.setVisible(true);
-                                dispose();
-                            }else{
-//                                User user = new User();
-//                                user.setVisible(true);
-//                                dispose();
-                            }
-                        }else{
-                            notification.setText("EROR");
-                        }
+                    String a[]=us.login(tfUser.getText(),tfPassword.getText());
+                    if(a==null){
+                        JOptionPane.showMessageDialog(null, "Login Failed!");
+                        return;
+                    }
+                    if(a[1].equals("R01")==true){
+                        Manager manager = new Manager(a[0]);
+                        manager.setVisible(true);
+                        dispose();
+                    }else{
+                        ChoseVehicle choseVehicle = new ChoseVehicle(a[0]);
+                        choseVehicle.setVisible(true);
+                        dispose();
                     }
                 } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(null, "Login Failed!");
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, "Login Failed!");
                 }
 
             }

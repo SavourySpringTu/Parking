@@ -48,6 +48,8 @@ public class RoleUserManager extends JFrame {
     private Role role = new Role();
     private User user = new User();
     private String user1;
+    private ImageIcon i;
+    private Image m;
 
     public RoleUserManager(String username) throws SQLException, ClassNotFoundException {
         user1 = username;
@@ -114,7 +116,11 @@ public class RoleUserManager extends JFrame {
         // =================== ADD USER ======================
         panel.add(btnAddU);
         btnAddU.setBounds(1300, 120, 130, 35);
-        btnAddU.setBackground(Color.green);
+        btnAddU.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnInsert.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnAddU.setIcon(new ImageIcon(m));
+        btnAddU.setBackground(new Color(42, 115, 196));
         btnAddU.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -132,7 +138,11 @@ public class RoleUserManager extends JFrame {
         // ================== BUTTON UPDATE USER ======================
         panel.add(btnUpdateU);
         btnUpdateU.setBounds(1300, 170, 130, 35);
-        btnUpdateU.setBackground(Color.ORANGE);
+        btnUpdateU.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnUpdate.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnUpdateU.setIcon(new ImageIcon(m));
+        btnUpdateU.setBackground(new Color(42, 115, 196));
         btnUpdateU.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,7 +159,11 @@ public class RoleUserManager extends JFrame {
         // ================== BUTTON DELETE USER =======================
         panel.add(btnDeleteU);
         btnDeleteU.setBounds(1300, 220, 130, 35);
-        btnDeleteU.setBackground(Color.RED);
+        btnDeleteU.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnDelete.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnDeleteU.setIcon(new ImageIcon(m));
+        btnDeleteU.setBackground(new Color(42, 115, 196));
         btnDeleteU.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -167,7 +181,10 @@ public class RoleUserManager extends JFrame {
         // =================== BUTTON ADD ROLE =====================
         panel.add(btnAddRole);
         btnAddRole.setBounds(350, 120, 130, 35);
-        btnAddRole.setBackground(Color.green);
+        i = new ImageIcon("src\\icon\\btnInsert.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnAddRole.setIcon(new ImageIcon(m));
+        btnAddRole.setBackground(new Color(42, 115, 196));
         btnAddRole.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -185,12 +202,16 @@ public class RoleUserManager extends JFrame {
         // ====================== BUTTON UPDATE ROLE ==================
         panel.add(btnUpdateRole);
         btnUpdateRole.setBounds(350, 170, 130, 35);
-        btnUpdateRole.setBackground(Color.orange);
+        btnUpdateRole.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnUpdate.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnUpdateRole.setIcon(new ImageIcon(m));
+        btnUpdateRole.setBackground(new Color(42, 115, 196));
         btnUpdateRole.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    role.updateRole(tfId.getText(),tfName.getText());
+                    role.updateRole(tfId.getText(),tfName.getText(),false);
                     refreshTable();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -203,7 +224,11 @@ public class RoleUserManager extends JFrame {
         // =================== BUTTON DELETE ROLE ==================
         panel.add(btnDeleteRole);
         btnDeleteRole.setBounds(350, 220, 130, 35);
-        btnDeleteRole.setBackground(Color.RED);
+        btnDeleteRole.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\btnDelete.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnDeleteRole.setIcon(new ImageIcon(m));
+        btnDeleteRole.setBackground(new Color(42, 115, 196));
         btnDeleteRole.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -221,7 +246,11 @@ public class RoleUserManager extends JFrame {
         // ================== BUTTON EXIT ======================
         panel.add(btnExit);
         btnExit.setBounds(10,10,100,50);
-        btnExit.setBackground(Color.RED);
+        btnExit.setForeground(Color.WHITE);
+        i = new ImageIcon("src\\icon\\logout.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnExit.setIcon(new ImageIcon(m));
+        btnExit.setBackground(new Color(42, 115, 196));
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -237,6 +266,8 @@ public class RoleUserManager extends JFrame {
         table.getTableHeader().setBackground(Color.CYAN);
         table.setFont(new Font("Serif", Font.PLAIN, 20));
         table.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setBackground(new Color(42, 115, 196));
         table.setRowHeight(30);
         table.setModel(showList(model));
 
@@ -262,6 +293,8 @@ public class RoleUserManager extends JFrame {
         tableU.getTableHeader().setBackground(Color.CYAN);
         tableU.setFont(new Font("Serif", Font.PLAIN, 20));
         tableU.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 25));
+        tableU.getTableHeader().setForeground(Color.WHITE);
+        tableU.getTableHeader().setBackground(new Color(42, 115, 196));
         tableU.setRowHeight(30);
         tableU.setModel(showListU(modelU));
         // ================== USER MOUSE CLICK =====================
@@ -300,7 +333,8 @@ public class RoleUserManager extends JFrame {
     public void refreshTable() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM role");
         ResultSet rs = pstmt.executeQuery();
-        table.setModel(DbUtils.resultSetToTableModel(rs));
+        String header[] = {"Id","Name"};
+        table.setModel(DbUtils.resultSetToTableModel(rs,header));
     }
     public void clickTableRole(){
         int i = table.getSelectedRow();
@@ -311,13 +345,17 @@ public class RoleUserManager extends JFrame {
     // =================== LIST USER =======================
     public DefaultTableModel showListU(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) tableU.getModel();
-        String header[] = {"User name","Name","Password","Id Role"};
+        String header[] = {"User name","Name","Password","Id Role","Status"};
         model.setColumnIdentifiers(header);
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM user");
         ResultSet rs = pstmt.executeQuery();
         while(rs.next())
         {
-            String row [] = {rs.getString("username"),rs.getString("name"),rs.getString("password"),rs.getString("id_role")};
+            String row [] = {rs.getString("username"),
+                    rs.getString("name"),
+                    rs.getString("password"),
+                    rs.getString("id_role"),
+                    String.valueOf(rs.getBoolean("status"))};
             model.addRow(row);
         }
         pstmt.close();
@@ -326,7 +364,8 @@ public class RoleUserManager extends JFrame {
     public void refreshTableU() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM user");
         ResultSet rs = pstmt.executeQuery();
-        tableU.setModel(DbUtils.resultSetToTableModel(rs));
+        String header[] = {"User name","Name","Password","Id Role","Status"};
+        tableU.setModel(DbUtils.resultSetToTableModel(rs,header));
     }
     public void clickTableUser(){
         int i = tableU.getSelectedRow();
