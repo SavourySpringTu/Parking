@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Connection.ConnectionSQL;
 import Process.*;

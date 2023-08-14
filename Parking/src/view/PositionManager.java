@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Process.*;
 import Connection.ConnectionSQL;
@@ -21,6 +21,7 @@ public class PositionManager extends JFrame {
     private JPanel panel;
     private JLabel lbId;
     private JLabel lbType;
+    private JLabel lbCamera;
     private JTextField tfId;
     private JComboBox tfType;
     private JTextField tfCamera;
@@ -49,6 +50,7 @@ public class PositionManager extends JFrame {
         lbType = new JLabel("Loại xe");
         tfId = new JTextField();
         tfType = new JComboBox(combobox);
+        lbCamera = new JLabel("Camera");
         tfCamera = new JTextField();
         btnAdd = new JButton("THÊM");
         btnUpdate = new JButton("SỬA");
@@ -63,6 +65,9 @@ public class PositionManager extends JFrame {
         panel.add(lbType);
         lbType.setBounds(250,160,100,50);
         lbType.setFont(new Font("Verdana", Font.PLAIN, 18));
+        lbCamera.setBounds(250,210,100,50);
+        lbCamera.setFont(new Font("Verdana", Font.PLAIN, 18));
+        panel.add(lbCamera);
 
         panel.add(tfId);
         tfId.setBounds(330,120,130,35);
@@ -86,7 +91,11 @@ public class PositionManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    positions.addPosition(Boolean.parseBoolean((String) tfType.getItemAt(tfType.getSelectedIndex())),tfCamera.getText());
+                    boolean typevh =true;
+                    if((tfType.getItemAt(tfType.getSelectedIndex())).equals("Xe máy")==true){
+                        typevh = false;
+                    }
+                    positions.addPosition(typevh,tfCamera.getText());
                     refreshTable();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Lỗi!");
@@ -109,7 +118,11 @@ public class PositionManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    positions.updatePosition(tfId.getText(),Boolean.parseBoolean((String) tfType.getItemAt(tfType.getSelectedIndex())),tfCamera.getText());
+                    boolean typevh =true;
+                    if((tfType.getItemAt(tfType.getSelectedIndex())).equals("Xe máy")==true){
+                        typevh = false;
+                    }
+                    positions.updatePosition(tfId.getText(),typevh,tfCamera.getText());
                     refreshTable();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Lỗi!");

@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Connection.ConnectionSQL;
 import Process.*;
@@ -77,23 +77,28 @@ public class WarehouseManager extends JFrame{
         tfId = new JTextField();
         tfId.setBounds(180,110,200,35);
         tfId.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfId.setEditable(false);
         panel.add(tfId);
         tfTimeIn = new JTextField();
         tfTimeIn.setBounds(180,160,200,35);
         tfTimeIn.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfTimeIn.setEditable(false);
         panel.add(tfTimeIn);
         tfTimeOut = new JTextField();
         tfTimeOut.setBounds(180,210,200,35);
         tfTimeOut.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfTimeOut.setEditable(false);
         panel.add(tfTimeOut);
         tfIdTicket = new JTextField();
         tfIdTicket.setBounds(550,110,200,35);
         tfIdTicket.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfIdTicket.setEditable(false);
         panel.add(tfIdTicket);
         String TypeVehicle[] ={"Ôtô","Xe máy"};
         jcStatus = new JComboBox(TypeVehicle);
         jcStatus.setBounds(550,160,200,35);
         jcStatus.setFont(new Font("Verdana", Font.PLAIN, 18));
+        jcStatus.setEditable(false);
         panel.add(jcStatus);
 
         lbImage= new JLabel();

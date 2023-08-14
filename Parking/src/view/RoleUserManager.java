@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Process.*;
 import Connection.ConnectionSQL;
@@ -149,7 +149,7 @@ public class RoleUserManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    user.addUser(tfIdU.getText(),tfNameU.getText(),tfPasswordU.getText(),tfIdRoleU.getText());
+                    user.addUser(tfIdU.getText(),tfNameU.getText(),tfPasswordU.getText(),tfIdRoleU.getText(),cbStatusU.isSelected());
                     refreshTableU();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Lỗi!");
@@ -355,7 +355,7 @@ public class RoleUserManager extends JFrame {
     // ======================== LIST ROLE ======================
     public DefaultTableModel showList(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) table.getModel();
-        String header[] = {"Id","Name"};
+        String header[] = {"Id","Tên"};
         model.setColumnIdentifiers(header);
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM role");
         ResultSet rs = pstmt.executeQuery();
@@ -370,7 +370,7 @@ public class RoleUserManager extends JFrame {
     public void refreshTable() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM role");
         ResultSet rs = pstmt.executeQuery();
-        String header[] = {"Id","Name"};
+        String header[] = {"Id","Tên"};
         table.setModel(resultSetToTableModel(rs,header));
     }
     public void clickTableRole(){
@@ -382,7 +382,7 @@ public class RoleUserManager extends JFrame {
     // =================== LIST USER =======================
     public DefaultTableModel showListU(DefaultTableModel model) throws SQLException, ClassNotFoundException {
         model = (DefaultTableModel) tableU.getModel();
-        String header[] = {"User name","Name","Password","Id Role","Status"};
+        String header[] = {"User name","Tên","Mật khẩu","Vai trò","Trạng thái"};
         model.setColumnIdentifiers(header);
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM user");
         ResultSet rs = pstmt.executeQuery();
@@ -401,7 +401,7 @@ public class RoleUserManager extends JFrame {
     public void refreshTableU() throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM user");
         ResultSet rs = pstmt.executeQuery();
-        String header[] = {"User name","Name","Password","Id Role","Status"};
+        String header[] = {"User name","Tên","Mật khẩu","Vai trò","Trạng thái"};
         tableU.setModel(resultSetToTableModel(rs,header));
     }
     public void clickTableUser(){

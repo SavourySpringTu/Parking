@@ -9,4 +9,15 @@ public class Check {
             return true;
         }
     }
+    public boolean checkInt(String id){
+        try{
+            int i = Integer.parseInt(id);
+            if(i<0){
+                return false;
+            }
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
 }

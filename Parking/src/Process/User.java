@@ -10,12 +10,13 @@ import java.sql.SQLException;
 public class User {
     private ConnectionSQL connectionSQL = new ConnectionSQL();
     private Check check = new Check();
-    public void addUser(String id,String name,String password,String role) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO user(username,name,password,id_role) VALUES (?,?,?,?)");
+    public void addUser(String id,String name,String password,String role,boolean status) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("INSERT INTO user(username,name,password,id_role,status) VALUES (?,?,?,?,?)");
         pstmt.setString(1,id);
         pstmt.setString(2,name);
         pstmt.setString(3,password);
         pstmt.setString(4,role);
+        pstmt.setBoolean(5,status);
         pstmt.executeUpdate();
         pstmt.close();
         JOptionPane.showMessageDialog(null, "Thành công!");
@@ -49,7 +50,7 @@ public class User {
     // =================== Login  ===================
     public String[] login(String user,String password) throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
-                "SELECT username,password,id_role FROM user");
+                "SELECT username,password,id_role FROM user WHERE status=0");
         ResultSet rs = pstmt.executeQuery();
         String resul[]={"",""};
         while(rs.next()){

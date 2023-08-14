@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Connection.ConnectionSQL;
 import Process.*;
@@ -38,10 +38,11 @@ public class TypeTicketManager extends JFrame {
     private TypeTicket tt = new TypeTicket();
     private ConnectionSQL connectionSQL = new ConnectionSQL();
     private DefaultTableModel model = new DefaultTableModel();
+    private Check check = new Check();
     public TypeTicketManager(String user) throws SQLException, ClassNotFoundException {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(170,60,1100, 1000);
+        setBounds(170,60,1100, 850);
         panel = new JPanel();
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(panel);
@@ -125,6 +126,10 @@ public class TypeTicketManager extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if(check.checkInt(tfPrice.getText())==false){
+                        JOptionPane.showMessageDialog(null, "Giá phải là số dương!");
+                        return;
+                    }
                     tt.updatePrice(tfId.getText(), Integer.parseInt(tfPrice.getText()));
                     refreshTable();
                 } catch (SQLException ex) {
@@ -157,7 +162,7 @@ public class TypeTicketManager extends JFrame {
         panel.add(sp);
         sp.setFont(new Font("Serif", Font.PLAIN, 20));
         JScrollPane scrollPaneU = new JScrollPane(table);
-        scrollPaneU.setBounds(110, 400, 900, 500);
+        scrollPaneU.setBounds(110, 400, 900, 350);
         getContentPane().add(scrollPaneU);
     }
     // =================== LIST =======================

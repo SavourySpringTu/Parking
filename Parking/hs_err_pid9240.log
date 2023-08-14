@@ -27,7 +27,7 @@
 
 ---------------  S U M M A R Y ------------
 
-Command Line: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2023.1.2\lib\idea_rt.jar=56052:C:\Program Files\JetBrains\IntelliJ IDEA 2023.1.2\bin -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 view.Login
+Command Line: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2023.1.2\lib\idea_rt.jar=56052:C:\Program Files\JetBrains\IntelliJ IDEA 2023.1.2\bin -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 View.Login
 
 Host: AMD Ryzen 5 5500U with Radeon Graphics         , 12 cores, 15G,  Windows 11 , 64 bit Build 22621 (10.0.22621.1778)
 Time: Fri Jul 14 04:02:16 2023 SE Asia Standard Time elapsed time: 3.455944 seconds (0d 0h 0m 3s)
@@ -635,7 +635,7 @@ symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Us
 
 VM Arguments:
 jvm_args: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2023.1.2\lib\idea_rt.jar=56052:C:\Program Files\JetBrains\IntelliJ IDEA 2023.1.2\bin -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 
-java_command: view.Login
+java_command: View.Login
 java_class_path (initial): D:\Doc\Java\IntelliJ Project\Parking---Swing---MySQL---OpenCV-main\out\production\Parking-Swing;D:\App\Support\mysql-connector-j-8.0.33\mysql-connector-j-8.0.33.jar;D:\App\Support\opencv\build\java\opencv-480.jar
 Launcher Type: SUN_STANDARD
 

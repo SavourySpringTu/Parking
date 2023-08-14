@@ -17,7 +17,8 @@ public class Warehouse {
     private ConnectionSQL connectionSQL = new ConnectionSQL();
     private Ticket ticket = new Ticket();
     private Customer customer = new Customer();
-    public void scanTicketaddWarehouse() throws SQLException, ClassNotFoundException, NotFoundException, IOException {
+    public void scanTicketaddWarehouse()
+            throws SQLException, ClassNotFoundException, NotFoundException, IOException {
         LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
@@ -54,7 +55,8 @@ public class Warehouse {
     }
     public void exportWarehouse(int id) throws SQLException, ClassNotFoundException {
         LocalDateTime time = LocalDateTime.now();
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM warehouse WHERE id=?");
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "SELECT * FROM warehouse WHERE id=?");
         pstmt.setInt(1,id);
         ResultSet rs = pstmt.executeQuery();
         rs.next();
@@ -63,7 +65,8 @@ public class Warehouse {
             return;
         }
         pstmt.close();
-        PreparedStatement pstmt1 = connectionSQL.ConnectionSQL().prepareStatement("UPDATE warehouse SET timeout=?,status=? WHERE id=?");
+        PreparedStatement pstmt1 = connectionSQL.ConnectionSQL().prepareStatement(
+                "UPDATE warehouse SET timeout=?,status=? WHERE id=?");
         pstmt1.setObject(1,time);
         pstmt1.setBoolean(2,true);
         pstmt1.setInt(3,id);

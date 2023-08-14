@@ -17,7 +17,7 @@ instanceKlass javax/swing/text/SegmentCache
 instanceKlass java/awt/LightweightDispatcher$2
 instanceKlass java/awt/KeyboardFocusManager$2
 instanceKlass java/awt/Window$1DisposeAction
-instanceKlass view/Login$2
+instanceKlass View/Login$2
 instanceKlass javax/swing/JTextField$ScrollRepainter
 instanceKlass javax/swing/DefaultBoundedRangeModel
 instanceKlass javax/swing/BoundedRangeModel
@@ -1408,11 +1408,11 @@ instanceKlass java/awt/peer/PanelPeer
 instanceKlass java/awt/peer/FramePeer
 instanceKlass java/awt/peer/WindowPeer
 instanceKlass java/awt/peer/ContainerPeer
-instanceKlass view/Manager$4
-instanceKlass view/Manager$3
-instanceKlass view/Manager$2
+instanceKlass View/Manager$4
+instanceKlass View/Manager$3
+instanceKlass View/Manager$2
 instanceKlass jdk/internal/module/ModulePatcher$PatchedModuleReader
-instanceKlass view/Manager$1
+instanceKlass View/Manager$1
 instanceKlass javax/swing/plaf/basic/BasicHTML
 instanceKlass java/beans/VetoableChangeListener
 instanceKlass javax/swing/event/AncestorListener
@@ -1828,7 +1828,7 @@ instanceKlass java/awt/EventQueue$2
 instanceKlass sun/awt/AWTAccessor$EventQueueAccessor
 instanceKlass java/awt/EventQueue$1
 instanceKlass java/awt/EventQueue
-instanceKlass view/Login$1
+instanceKlass View/Login$1
 instanceKlass java/awt/Frame$1
 instanceKlass sun/awt/AWTAccessor$FrameAccessor
 instanceKlass java/awt/Window$1

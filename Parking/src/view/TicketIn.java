@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Connection.ConnectionSQL;
 
@@ -9,7 +9,6 @@ import com.github.sarxos.webcam.Webcam;
 import com.google.zxing.WriterException;
 
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +32,13 @@ public class TicketIn extends JFrame {
     private JTextField tfCustomer;
     private JButton btnTicketOut;
     private JButton btnCustomer;
+    private JLabel lbMoto;
+    private JLabel lbCar;
+    private JLabel lbU;
+    private JButton btnRefresh;
+    private JTextField tfMoto;
+    private JTextField tfCar;
+    private JTextField tfU;
     private ImageIcon i;
     private Image m;
     private JPanel panel;
@@ -41,7 +47,9 @@ public class TicketIn extends JFrame {
     private ConnectionSQL connectionSQL;
     private Ticket ticket = new Ticket();
     private Webcam webcam;
-    public TicketIn(String user,Boolean type){
+    private Check check = new Check();
+    private Positions positions = new Positions();
+    public TicketIn(String user,Boolean type) throws SQLException, ClassNotFoundException {
         connectionSQL = new ConnectionSQL();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,9 +75,22 @@ public class TicketIn extends JFrame {
         lbCustomer.setBounds(900,470,100,20);
         lbCustomer.setFont(new Font("Verdana", Font.PLAIN, 18));
         panel.add(lbCustomer);
+        lbU = new JLabel("Nhân viên");
+        lbU.setBounds(900,680,100,20);
+        lbU.setFont(new Font("Verdana", Font.PLAIN, 18));
+        panel.add(lbU);
+        lbMoto = new JLabel("Xe máy");
+        lbMoto.setBounds(900,817,100,20);
+        lbMoto.setFont(new Font("Verdana", Font.PLAIN, 18));
+        panel.add(lbMoto);
+        lbCar = new JLabel("Xe ô tô");
+        lbCar.setBounds(900,923,100,20);
+        lbCar.setFont(new Font("Verdana", Font.PLAIN, 18));
+        panel.add(lbCar);
 
-        btnTicketOut = new JButton();
-        btnTicketOut.setBounds(150,10,100,50);
+        btnTicketOut = new JButton("RA");
+        btnTicketOut.setForeground(Color.WHITE);
+        btnTicketOut.setBounds(250,10,200,50);
         i = new ImageIcon("src\\icon\\btnOutTicket.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btnTicketOut.setIcon(new ImageIcon(m));
@@ -86,8 +107,9 @@ public class TicketIn extends JFrame {
             }
         });
 
-        btnCustomer = new JButton();
-        btnCustomer.setBounds(290,10,100,50);
+        btnCustomer = new JButton("KHÁCH HÀNG");
+        btnCustomer.setBounds(490,10,200,50);
+        btnCustomer.setForeground(Color.WHITE);
         i =new ImageIcon("src\\icon\\peopel.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btnCustomer.setIcon(new ImageIcon(m));
@@ -121,7 +143,25 @@ public class TicketIn extends JFrame {
         tfCustomer.setBounds(1015,457,200,50);
         tfCustomer.setFont(new Font("Verdana", Font.PLAIN, 18));
         tfCustomer.setEditable(false);
+
+
         panel.add(tfCustomer);
+        tfMoto = new JTextField();
+        tfMoto.setBounds(1015,805,200,50);
+        tfMoto.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfMoto.setEditable(false);
+        panel.add(tfMoto);
+        tfCar = new JTextField();
+        tfCar.setBounds(1015,911,200,50);
+        tfCar.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfCar.setEditable(false);
+        panel.add(tfCar);
+        tfU = new JTextField();
+        tfU.setBounds(1015,668,200,50);
+        tfU.setFont(new Font("Verdana", Font.PLAIN, 18));
+        tfU.setEditable(false);
+        tfU.setText(user);
+        panel.add(tfU);
 
         camera = new JLabel();
         panel.add(camera);
@@ -139,6 +179,8 @@ public class TicketIn extends JFrame {
         p2.setBackground(Color.darkGray);
         p2.setBounds(40,580,600,450);
         panel.add(p2);
+
+
         // ====================== Webcam =================
         webcam= Webcam.getDefault();
         webcam.setViewSize(new Dimension(640,480));
@@ -160,9 +202,10 @@ public class TicketIn extends JFrame {
         }).start();
 
 
-        btnInsert = new JButton();
+        btnInsert = new JButton("THÊM");
         panel.add(btnInsert);
-        btnInsert.setBounds(1650,450,100,50);
+        btnInsert.setForeground(Color.WHITE);
+        btnInsert.setBounds(1600,450,200,50);
         i =new ImageIcon("src\\icon\\btnInsert.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btnInsert.setIcon(new ImageIcon(m));
@@ -171,6 +214,10 @@ public class TicketIn extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if(check.checkString(tfNumber.getText())==false){
+                        JOptionPane.showMessageDialog(null, "Biển số không hợp lệ!");
+                        return;
+                    }
                     String v = String.valueOf(ticket.countTicket());
                     ImageIO.write(webcam.getImage(),"png",new File("src\\image\\"+v+"1.png"));
                     ImageIO.write(webcam.getImage(),"png",new File("src\\image\\"+v+"2.png"));
@@ -194,6 +241,27 @@ public class TicketIn extends JFrame {
                 }
             }
         });
+        btnRefresh = new JButton("LÀM MỚI");
+        panel.add(btnRefresh);
+        btnRefresh.setForeground(Color.WHITE);
+        btnRefresh.setBounds(1600,668,200,50);
+        i =new ImageIcon("src\\icon\\btnRefresh.png");
+        m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btnRefresh.setIcon(new ImageIcon(m));
+        btnRefresh.setBackground(new Color(42, 115, 196));
+        btnRefresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    resetForm(tfMoto,tfCar,tfPrice,tfPosition,tfCustomer,tfNumber);
+                    tfNumber.setEditable(true);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         imageQR = new JLabel();
         panel.add(imageQR);
@@ -209,8 +277,14 @@ public class TicketIn extends JFrame {
         p3.setBounds(810,80,1060,450);
         panel.add(p3);
 
-        btnExit = new JButton();
-        btnExit.setBounds(10,10,100,50);
+        JPanel p5 = new JPanel();
+        p5.setBackground(Color.GRAY);
+        p5.setBounds(810,580,1060,450);
+        panel.add(p5);
+
+        btnExit = new JButton("THOÁT");
+        btnExit.setForeground(Color.WHITE);
+        btnExit.setBounds(10,10,200,50);
         i = new ImageIcon("src\\icon\\logout.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btnExit.setIcon(new ImageIcon(m));
@@ -225,16 +299,23 @@ public class TicketIn extends JFrame {
                 dispose();
             }
         });
+        resetForm(tfMoto,tfCar,tfPrice,tfPosition,tfCustomer,tfNumber);
     }
     private void setImageQR(JLabel label,String path){
         ImageIcon ii = new ImageIcon(path);
         Image image = ii.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
         label.setIcon(new ImageIcon(image));
     }
-    private void resetForm(){
-        tfNumber.setText("");
-        tfPrice.setText("");
-        tfPosition.setText("");
-        tfCustomer.setText("");
+    private void resetForm(JTextField rmoto,JTextField rcar,JTextField rprice,JTextField rposition,JTextField rcustomer,JTextField rnumber) throws SQLException, ClassNotFoundException {
+        String a[] = positions.countPositionEmpty();
+        ImageIcon ii = new ImageIcon("");
+        Image image = ii.getImage().getScaledInstance(imageQR.getWidth(), imageQR.getHeight(), Image.SCALE_SMOOTH);
+        imageQR.setIcon(new ImageIcon(image));
+        rcar.setText(a[1]);
+        rmoto.setText(a[0]);
+        rprice.setText("");
+        rnumber.setText("");
+        rposition.setText("");
+        rcustomer.setText("");
     }
 }

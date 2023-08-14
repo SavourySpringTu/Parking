@@ -121,4 +121,18 @@ public class Positions {
         }
         return true;
     }
+    public String[] countPositionEmpty() throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM positions WHERE status=0");
+        ResultSet rs = pstmt.executeQuery();
+        int a=0; int b=0;
+        while(rs.next()){
+            if(rs.getBoolean("type")==false){
+                a++;
+            }else{
+                b++;
+            }
+        }
+        String r[]={String.valueOf(a), String.valueOf(b)};
+        return r;
+    }
 }

@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Process.*;
 
@@ -16,6 +16,7 @@ import com.google.zxing.WriterException;
 public class Login extends JFrame {
     private JPanel panel;
     private JButton btnLogin;
+    private JButton btnExit;
     private JTextField tfUser;
     private JPasswordField tfPassword;
     private JLabel label;
@@ -23,7 +24,6 @@ public class Login extends JFrame {
     private User us = new User();
     static Warehouse warehouse = new Warehouse();
     static Customer customer = new Customer();
-    static Revenue revenue = new Revenue();
     static Ticket ticket = new Ticket();
     public static void main (String[] args) throws WriterException {
         EventQueue.invokeLater(new Runnable() {
@@ -55,8 +55,10 @@ public class Login extends JFrame {
         setContentPane(panel);
         panel.setLayout(null);
 
-        btnLogin = new JButton("Login");
+        btnLogin = new JButton("ĐĂNG NHẬP");
         btnLogin.setForeground(Color.WHITE);
+        btnExit = new JButton("THOÁT");
+        btnExit.setForeground(Color.WHITE);
         tfPassword = new JPasswordField();
         tfUser = new JTextField();
         label = new JLabel("PARKING");
@@ -101,6 +103,16 @@ public class Login extends JFrame {
                     JOptionPane.showMessageDialog(null, "Login Failed!");
                 }
 
+            }
+        });
+
+        panel.add(btnExit);
+        btnExit.setBounds(630,450,100,50);
+        btnExit.setBackground(new Color(42, 115, 196));
+        btnExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 

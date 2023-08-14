@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Connection.ConnectionSQL;
 
@@ -92,9 +92,15 @@ public class Register extends JFrame {
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TicketIn form = new TicketIn(user,type);
-                form.setVisible(true);
-                dispose();
+                try {
+                    TicketIn form = new TicketIn(user,type);
+                    form.setVisible(true);
+                    dispose();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

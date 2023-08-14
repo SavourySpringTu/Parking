@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import Connection.ConnectionSQL;
 
@@ -7,22 +7,14 @@ import javax.swing.*;
 import Process.*;
 import com.github.sarxos.webcam.Webcam;
 import com.google.zxing.NotFoundException;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.videoio.VideoCapture;
 
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 
 public class TicketOut extends JFrame {
     private JButton btnExport;
@@ -31,11 +23,9 @@ public class TicketOut extends JFrame {
     private JLabel imageQR;
     private JLabel lbNumber;
     private JLabel lbTimeIn;
-    private JLabel lbPosition;
     private JLabel lbCustomer;
     private JTextField tfNumber;
     private JTextField tfTimeIn;
-    private JTextField tfPosition;
     private JTextField tfCustomer;
     private JButton btnTicketIn;
     private JButton btnChoseImage;
@@ -69,17 +59,13 @@ public class TicketOut extends JFrame {
         lbTimeIn.setBounds(750, 782, 100, 20);
         lbTimeIn.setFont(new Font("Verdana", Font.PLAIN, 18));
         panel.add(lbTimeIn);
-        lbPosition = new JLabel("Position");
-        lbPosition.setBounds(750, 873, 100, 20);
-        lbPosition.setFont(new Font("Verdana", Font.PLAIN, 18));
-        panel.add(lbPosition);
         lbCustomer = new JLabel("Customer");
-        lbCustomer.setBounds(750, 970, 100, 20);
+        lbCustomer.setBounds(750, 873, 100, 20);
         lbCustomer.setFont(new Font("Verdana", Font.PLAIN, 18));
         panel.add(lbCustomer);
 
-        btnTicketIn = new JButton();
-        btnTicketIn.setBounds(150, 10, 100, 50);
+        btnTicketIn = new JButton("VÀO");
+        btnTicketIn.setBounds(10, 10, 200, 50);
         btnTicketIn.setForeground(Color.WHITE);
         i = new ImageIcon("src\\icon\\ticketin.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -89,10 +75,16 @@ public class TicketOut extends JFrame {
         btnTicketIn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                webcam.close();
-                TicketIn ticketIn = new TicketIn(user, type);
-                ticketIn.setVisible(true);
-                dispose();
+                try {
+                    webcam.close();
+                    TicketIn ticketIn = new TicketIn(user, type);
+                    ticketIn.setVisible(true);
+                    dispose();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -106,19 +98,14 @@ public class TicketOut extends JFrame {
         tfTimeIn.setFont(new Font("Verdana", Font.PLAIN, 18));
         tfTimeIn.setEditable(false);
         panel.add(tfTimeIn);
-        tfPosition = new JTextField();
-        tfPosition.setBounds(900, 860, 200, 50);
-        tfPosition.setFont(new Font("Verdana", Font.PLAIN, 18));
-        tfPosition.setEditable(false);
-        panel.add(tfPosition);
         tfCustomer = new JTextField();
-        tfCustomer.setBounds(900, 957, 200, 50);
+        tfCustomer.setBounds(900, 860, 200, 50);
         tfCustomer.setFont(new Font("Verdana", Font.PLAIN, 18));
         tfCustomer.setEditable(false);
         panel.add(tfCustomer);
 
-        btnExport = new JButton();
-        btnExport.setBounds(889, 436, 100, 50);
+        btnExport = new JButton("XUẤT");
+        btnExport.setBounds(900, 390, 130, 50);
         btnExport.setForeground(Color.WHITE);
         i = new ImageIcon("src\\icon\\logout.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -160,7 +147,7 @@ public class TicketOut extends JFrame {
         panel.add(p5);
 
         btnChoseImage= new JButton();
-        btnChoseImage.setBounds(1115, 239, 100, 50);
+        btnChoseImage.setBounds(1115, 200, 100, 50);
         btnChoseImage.setForeground(Color.WHITE);
         i = new ImageIcon("src\\icon\\btnBrowser.png");
         m = i.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -247,7 +234,7 @@ public class TicketOut extends JFrame {
 
         JPanel p3 = new JPanel();
         p3.setBackground(Color.GRAY);
-        p3.setBounds(673, 85, 559, 980);
+        p3.setBounds(673, 85, 559, 950);
         panel.add(p3);
     }
     public void refreshForm(){

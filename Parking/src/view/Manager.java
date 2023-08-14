@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -122,12 +122,6 @@ public class Manager extends JFrame {
             }
         });
 
-        panel.add(btnRevenue);
-        btnRevenue.setBounds(600,460,400,70);
-        btnRevenue.setFont(new Font("Verdana", Font.PLAIN, 18));
-        btnRevenue.setForeground(Color.WHITE);
-        btnRevenue.setBackground(new Color(42, 115, 196));
-
         panel.add(btnWareHouse);
         btnWareHouse.setBounds(600,580,400,70);
         btnWareHouse.setFont(new Font("Verdana", Font.PLAIN, 18));
@@ -167,7 +161,7 @@ public class Manager extends JFrame {
             }
         });
         panel.add(btnType);
-        btnType.setBounds(600,820,400,70);
+        btnType.setBounds(600,460,400,70);
         btnType.setFont(new Font("Verdana", Font.PLAIN, 18));
         btnType.setForeground(Color.WHITE);
         btnType.setBackground(new Color(42, 115, 196));

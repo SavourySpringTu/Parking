@@ -14,7 +14,7 @@ public class Customer {
     private ConnectionSQL connectionSQL = new ConnectionSQL();
     private TypeTicket typeTicket = new TypeTicket();
 
-    public int findCustomerbyNumber(String number) throws SQLException, ClassNotFoundException {
+        public int findCustomerbyNumber(String number) throws SQLException, ClassNotFoundException {
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM customer");
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {

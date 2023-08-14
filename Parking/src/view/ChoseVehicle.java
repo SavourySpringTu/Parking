@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,9 +33,15 @@ public class ChoseVehicle extends JFrame{
         btnCar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TicketIn form = new TicketIn(user,true);
-                form.setVisible(true);
-                dispose();
+                try {
+                    TicketIn form = new TicketIn(user,true);
+                    form.setVisible(true);
+                    dispose();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         btnMotor = new JButton("Motor");
@@ -48,9 +54,15 @@ public class ChoseVehicle extends JFrame{
         btnMotor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TicketIn form = new TicketIn(user,false);
-                form.setVisible(true);
-                dispose();
+                try {
+                    TicketIn form = new TicketIn(user,false);
+                    form.setVisible(true);
+                    dispose();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

@@ -136,13 +136,16 @@ public class Ticket {
         rs.next();
         return rs.getInt("id");
     }
-    public String[] insertTicket(String number,Boolean typeVehicle,String user,String path,String path1) throws SQLException, ClassNotFoundException {
+    public String[] insertTicket(String number,Boolean typeVehicle,String user,String path,String path1)
+            throws SQLException, ClassNotFoundException {
         if(checkNumberVehicle(number)==false){
             JOptionPane.showMessageDialog(null, "Number Duplicate!");
             return null;
         }
         PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
-                "INSERT INTO ticket(timein,timeout,number_vehicle,type_vehicle,id_type,id_position,id_user) VALUES (?,?,?,?,?,?,?)");
+                "INSERT INTO ticket(timein,timeout,number_vehicle," +
+                        "type_vehicle,id_type,id_position,id_user)" +
+                        " VALUES (?,?,?,?,?,?,?)");
         LocalDateTime time = LocalDateTime.now();
         pstmt.setObject(1,time);
         pstmt.setObject(2,null);
@@ -180,7 +183,8 @@ public class Ticket {
         positions.updateInsertandExporttVehicle(p,true);
 
         // ==================== RETURN DATA =====================
-        pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT id_type,id_position,id_customer FROM ticket WHERE id=?");
+        pstmt = connectionSQL.ConnectionSQL().prepareStatement("" +
+                "SELECT id_type,id_position,id_customer FROM ticket WHERE id=?");
         pstmt.setInt(1,tmpId);
         ResultSet rs = pstmt.executeQuery();
         rs.next();
@@ -248,7 +252,10 @@ public class Ticket {
         }
     }
     public String readQR(String path) throws FileNotFoundException, IOException, NotFoundException {
-        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(path)))));
+        BinaryBitmap binaryBitmap = new BinaryBitmap(
+                new HybridBinarizer(
+                new BufferedImageLuminanceSource(ImageIO.read(
+                new FileInputStream(path)))));
         Result result = new MultiFormatReader().decode(binaryBitmap);
         return result.getText();
     }

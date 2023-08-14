@@ -30,15 +30,15 @@ public class Images {
         pstmt.close();
     }
     public void updateImage(int id_ticket,String path,boolean type) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE image SET url=? WHERE id_ticket=? AND type =? AND status='0'");
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("UPDATE image SET url=? WHERE id_ticket=? AND type =?");
         pstmt.setString(1,path);
         pstmt.setInt(2,id_ticket);
         pstmt.setBoolean(3,type);
         pstmt.executeUpdate();
         pstmt.close();
     }
-    public void deleteImage(int id_ticket) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("DELETE FROM image WHERE id_ticket=? AND status='0'");
+        public void deleteImage(int id_ticket) throws SQLException, ClassNotFoundException {
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("DELETE FROM image WHERE id_ticket=?");
         pstmt.setInt(1,id_ticket);
         pstmt.executeUpdate();
         pstmt.close();
