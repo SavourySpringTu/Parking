@@ -73,11 +73,7 @@ public class Ticket {
                     "UPDATE ticket SET id_customer=?,id_type=? WHERE id=?");
             pstmt.setInt(3,tmpId);
             pstmt.setInt(1,tmpCs);
-            if(type_vehicle==false){
-                pstmt.setString(2,"T01");
-            }else{
-                pstmt.setString(2,"T02");
-            }
+            pstmt.setString(2,type_ticket);
             pstmt.executeUpdate();
             pstmt.close();
         }
@@ -89,19 +85,38 @@ public class Ticket {
 
     // ====================== UPDATE ===========================
     public void updateTicket(int id,String number,String type_ticket,int position,String path,String path1) throws SQLException, ClassNotFoundException {
+        // =============== check export ==========================
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "SELECT * FROM ticket WHERE id=? AND timeout IS NOT NULL");
+        pstmt.setInt(1,id);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            JOptionPane.showMessageDialog(null, "Cannot Update!");
+            return;
+        }
+
+        // ==============================================
         if(cannotChangeType(id,type_ticket)==false)
         {
             JOptionPane.showMessageDialog(null, "Cannot Change Type Ticket!");
             return;
         }
-        if(positions.checkChangPosition(id,position)==false){
-            JOptionPane.showMessageDialog(null, "Cannot Change Position!");
-            return;
+
+        pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "SELECT * FROM ticket WHERE id=?");
+        pstmt.setInt(1,id);
+        rs = pstmt.executeQuery();
+        rs.next();
+        if(rs.getInt("id_position")!=position){
+            if(positions.checkChangPosition(id,position)==false){
+                JOptionPane.showMessageDialog(null, "Cannot Change Position!");
+                return;
+            }
         }
+
+        // ======================== update =========================
         int x = positions.findPositionbyTicket(id);
         positions.updateInsertandExporttVehicle(x,false);
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
-                "UPDATE ticket SET number_vehicle=?,id_type=?,id_position=? WHERE id=?");
         pstmt = connectionSQL.ConnectionSQL().prepareStatement(
                 "UPDATE ticket SET number_vehicle=?,id_type=?,id_position=? WHERE id=?");
         pstmt.setString(1,number);
@@ -109,6 +124,19 @@ public class Ticket {
         pstmt.setInt(3, position);
         pstmt.setInt(4, id);
         pstmt.executeUpdate();
+        int tmp_cs = customer.findCustomerbyNumber(number);
+        if(tmp_cs==0){
+            pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                    "UPDATE ticket SET id_customer=null WHERE id=?");
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }else {
+            pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                    "UPDATE ticket SET id_customer=? WHERE id=?");
+            pstmt.setInt(1, tmp_cs);
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+        }
         pstmt.close();
         positions.updateInsertandExporttVehicle(position,true);
         images.updateImage(id,path,false);
@@ -206,7 +234,6 @@ public class Ticket {
         String a[]={a1,a2,a3, String.valueOf(tmpId)};
         return a;
     }
-    // ================= CHECK NUMBER AND TYPE VEHICLE OF CUSTOMER=============
 
     // ================= EXPORT TICKET =====================
     public void exportTicket(int id) throws IOException, NotFoundException, SQLException, ClassNotFoundException {

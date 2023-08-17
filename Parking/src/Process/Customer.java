@@ -15,15 +15,12 @@ public class Customer {
     private TypeTicket typeTicket = new TypeTicket();
 
         public int findCustomerbyNumber(String number) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM customer");
+        PreparedStatement pstmt = connectionSQL.ConnectionSQL().prepareStatement(
+                "SELECT * FROM customer WHERE status=0 AND number_vehicle=?");
+        pstmt.setString(1,number);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            if (rs.getBoolean("status") == true) {
-                return 0;
-            }
-            if (rs.getString("number_vehicle").equals(number) == true) {
-                return rs.getInt("id");
-            }
+            return rs.getInt("id");
         }
         return 0;
     }

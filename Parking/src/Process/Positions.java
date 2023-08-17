@@ -111,12 +111,12 @@ public class Positions {
         rs.next();
         boolean a = rs.getBoolean("type_vehicle");
         pstmt.close();
-        pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT type FROM positions WHERE id=?");
+        pstmt = connectionSQL.ConnectionSQL().prepareStatement("SELECT * FROM positions WHERE id=?");
         pstmt.setInt(1,id_ps);
         rs = pstmt.executeQuery();
         rs.next();
         boolean a1 = rs.getBoolean("type");
-        if(a!=a1){
+        if(a!=a1 || rs.getBoolean("status")==true){
             return false;
         }
         return true;
